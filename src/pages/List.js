@@ -27,7 +27,7 @@ function ListContent() {
             className="w-24 h-24 mx-auto mb-4"
           />
           <h1 className="text-2xl font-bold text-gray-900">
-            買い物リスト
+            「門」買い出しリスト
           </h1>
         </div>
       </div>
