@@ -4,9 +4,9 @@ import { useShoppingContext } from '../contexts/ShoppingContext';
 
 export default function QuickInput() {
   const [input, setInput] = useState('');
-  const { addItem, currentStore } = useShoppingContext();
+  const { addItem, currentStore, isRequester } = useShoppingContext();
 
-  const handleQuickInput = (input) => {
+  const handleQuickInput = async (input) => {
     if (!input.trim()) return;
     
     const match = input.trim().match(/^(.+?)(?:\s+(\d+))?$/);
@@ -15,12 +15,16 @@ export default function QuickInput() {
       const itemName = match[1];
       const quantity = match[2] ? parseInt(match[2]) : 1;
       
-      addItem({
-        name: itemName,
-        quantity,
-        store: currentStore
-      });
-      setInput('');
+      try {
+        await addItem({
+          name: itemName,
+          quantity,
+          store: currentStore
+        });
+        setInput('');
+      } catch (error) {
+        console.error('Error adding item:', error);
+      }
     }
   };
 
@@ -35,6 +39,10 @@ export default function QuickInput() {
       handleQuickInput(input);
     }
   };
+
+  if (!isRequester) {
+    return null;
+  }
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 p-4">

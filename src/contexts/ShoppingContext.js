@@ -128,7 +128,8 @@ export const ShoppingProvider = ({ children, listId }) => {
     getStoreStatus,
     stores: defaultStores,
     isRequester: metadata?.currentRole === roleTypes.REQUESTER,
-    isShopper: metadata?.currentRole === roleTypes.SHOPPER
+    isShopper: metadata?.currentRole === roleTypes.SHOPPER,
+    currentRole: metadata?.currentRole || roleTypes.REQUESTER
   };
 
   return (
