@@ -21,11 +21,18 @@ function ListContent() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
-          <img 
-            src="/logo.png"
-            alt="門"
-            className="w-24 h-24 mx-auto mb-4"
-          />
+          <div className="w-32 h-32 mx-auto mb-6 flex items-center justify-center">
+            <img 
+              src="/logo.png"
+              alt="門"
+              className="w-full h-full object-contain"
+              style={{
+                filter: 'brightness(0)',
+                maxWidth: '100%',
+                maxHeight: '100%'
+              }}
+            />
+          </div>
           <h1 className="text-2xl font-bold text-gray-900">
             「門」買い出しリスト
           </h1>
