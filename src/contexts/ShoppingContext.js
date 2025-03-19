@@ -69,6 +69,18 @@ export const ShoppingProvider = ({ children, listId }) => {
     }
   };
 
+  const deleteItem = async (store, itemId) => {
+    if (!listId) return;
+    
+    const itemRef = ref(database, `lists/${listId}/items/${store}/${itemId}`);
+    try {
+      await set(itemRef, null);
+      console.log('Item deleted successfully:', itemId);
+    } catch (error) {
+      console.error('Error deleting item:', error);
+    }
+  };
+
   const updateListStatus = async (store, status) => {
     if (!listId) return;
     
@@ -110,6 +122,7 @@ export const ShoppingProvider = ({ children, listId }) => {
     setCurrentStore,
     addItem,
     updateItem,
+    deleteItem,
     switchRole,
     updateListStatus,
     getStoreStatus,
