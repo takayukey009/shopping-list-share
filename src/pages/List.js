@@ -11,11 +11,11 @@ export default function List() {
 
   return (
     <ShoppingProvider listId={listId}>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 pb-32">
         <Header />
-        <main>
+        <main className="max-w-3xl mx-auto px-4">
           <StoreSelector />
-          <div className="max-w-3xl mx-auto px-4">
+          <div className="mt-4">
             <ShoppingList />
             <TemplateItems />
           </div>

@@ -24,6 +24,16 @@ export const ShoppingProvider = ({ children, listId }) => {
           ...initialListState.metadata,
           createdAt: serverTimestamp()
         });
+      } else {
+        // リストが存在しない場合、新規作成
+        const newList = {
+          items: initialListState.items,
+          metadata: {
+            ...initialListState.metadata,
+            createdAt: serverTimestamp()
+          }
+        };
+        set(listRef, newList);
       }
     });
 
@@ -31,9 +41,10 @@ export const ShoppingProvider = ({ children, listId }) => {
   }, [listId]);
 
   const addItem = async (item) => {
-    if (!listId || metadata.currentRole !== roleTypes.REQUESTER) return;
+    if (!listId) return;
+    
     const store = item.store || currentStore;
-    const listRef = ref(database, `lists/${listId}/items/${store}`);
+    const itemsRef = ref(database, `lists/${listId}/items/${store}`);
     const newItem = {
       name: item.name,
       quantity: item.quantity || 1,
@@ -41,7 +52,13 @@ export const ShoppingProvider = ({ children, listId }) => {
       timestamp: serverTimestamp(),
       addedBy: roleTypes.REQUESTER
     };
-    await push(listRef, newItem);
+
+    try {
+      await push(itemsRef, newItem);
+      console.log('Item added successfully:', newItem);
+    } catch (error) {
+      console.error('Error adding item:', error);
+    }
   };
 
   const updateItem = async (store, itemId, updates) => {
@@ -59,20 +76,38 @@ export const ShoppingProvider = ({ children, listId }) => {
     }
 
     const itemRef = ref(database, `lists/${listId}/items/${store}/${itemId}`);
-    await set(itemRef, { ...items[store][itemId], ...updates });
-  };
-
-  const switchRole = async () => {
-    if (!listId) return;
-    const newRole = metadata.currentRole === roleTypes.REQUESTER ? roleTypes.SHOPPER : roleTypes.REQUESTER;
-    const metadataRef = ref(database, `lists/${listId}/metadata`);
-    await set(metadataRef, { ...metadata, currentRole: newRole });
+    try {
+      await set(itemRef, { ...items[store][itemId], ...updates });
+      console.log('Item updated successfully:', updates);
+    } catch (error) {
+      console.error('Error updating item:', error);
+    }
   };
 
   const updateListStatus = async (store, status) => {
     if (!listId) return;
+    
     const statusRef = ref(database, `lists/${listId}/metadata/status/${store}`);
-    await set(statusRef, status);
+    try {
+      await set(statusRef, status);
+      console.log('Status updated successfully:', status);
+    } catch (error) {
+      console.error('Error updating status:', error);
+    }
+  };
+
+  const switchRole = async () => {
+    if (!listId) return;
+    
+    const newRole = metadata.currentRole === roleTypes.REQUESTER ? roleTypes.SHOPPER : roleTypes.REQUESTER;
+    const metadataRef = ref(database, `lists/${listId}/metadata`);
+    
+    try {
+      await set(metadataRef, { ...metadata, currentRole: newRole });
+      console.log('Role switched successfully to:', newRole);
+    } catch (error) {
+      console.error('Error switching role:', error);
+    }
   };
 
   const getStoreStatus = (store) => {

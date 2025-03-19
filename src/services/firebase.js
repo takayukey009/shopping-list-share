@@ -22,8 +22,20 @@ export { database, ref, set, onValue, serverTimestamp, push };
 
 // デフォルトの店舗設定
 export const defaultStores = {
-  okstore: 'オーケーストア',
-  hanamasa: 'ハナマサ'
+  okstore: {
+    name: 'オーケーストア',
+    hours: {
+      open: '08:30',
+      close: '21:30'
+    }
+  },
+  hanamasa: {
+    name: 'ハナマサ',
+    hours: {
+      open: '00:00',
+      close: '24:00'
+    }
+  }
 };
 
 // リストの役割タイプ
