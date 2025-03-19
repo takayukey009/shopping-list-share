@@ -1,24 +1,25 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, onValue, serverTimestamp, push } from "firebase/database";
+import { getDatabase, ref, set, onValue, push, serverTimestamp } from "firebase/database";
 
 // Firebase設定
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "AIzaSyDi7i2EhUpIQqwtvg0sOK6itUhojZX1TPc",
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "shopping-list-share-43e1f.firebaseapp.com",
-  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL || "https://shopping-list-share-43e1f-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "shopping-list-share-43e1f",
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "shopping-list-share-43e1f.appspot.com",
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "582639473155",
-  appId: process.env.REACT_APP_FIREBASE_APP_ID || "1:582639473155:web:735113953f479b7a397436"
+  apiKey: "AIzaSyDi7i2EhUpIQqwtvg0sOK6itUhojZX1TPc",
+  authDomain: "shopping-list-share-43e1f.firebaseapp.com",
+  databaseURL: "https://shopping-list-share-43e1f-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "shopping-list-share-43e1f",
+  storageBucket: "shopping-list-share-43e1f.appspot.com",
+  messagingSenderId: "582639473155",
+  appId: "1:582639473155:web:735113953f479b7a397436"
 };
 
 // Firebase初期化
-console.log('Initializing Firebase with config:', { ...firebaseConfig, apiKey: '[HIDDEN]' });
+console.log('Initializing Firebase with config:', {
+  ...firebaseConfig,
+  apiKey: '[HIDDEN]'
+});
+
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
-
-// エクスポート
-export { database, ref, set, onValue, serverTimestamp, push };
 
 // デフォルトの店舗設定
 export const defaultStores = {
@@ -40,8 +41,8 @@ export const defaultStores = {
 
 // リストの役割タイプ
 export const roleTypes = {
-  REQUESTER: 'requester', // 依頼側
-  SHOPPER: 'shopper'      // 購入側
+  REQUESTER: '依頼主',
+  SHOPPER: '購入者'
 };
 
 // リストの初期状態
@@ -58,12 +59,6 @@ export const initialListState = {
     okstore: {},
     hanamasa: {}
   }
-};
-
-// リストの進行状況の初期値
-export const initialListStatus = {
-  okstore: { inProgress: false, completedAt: null },
-  hanamasa: { inProgress: false, completedAt: null }
 };
 
 // テンプレートアイテム
@@ -121,3 +116,5 @@ export const templateItems = {
 export const generateListId = () => {
   return Math.random().toString(36).substring(2, 10);
 };
+
+export { database, ref, set, onValue, serverTimestamp, push };

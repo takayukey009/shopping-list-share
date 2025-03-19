@@ -1,10 +1,9 @@
 import { useShoppingContext } from '../contexts/ShoppingContext';
-import { templateItems } from '../services/firebase';
 import { motion } from 'framer-motion';
 
 export default function TemplateItems() {
-  const { currentStore, addItem } = useShoppingContext();
-  const templates = templateItems[currentStore] || {};
+  const { currentStore, addItem, templates } = useShoppingContext();
+  const storeTemplates = templates?.[currentStore] || {};
 
   const handleAddTemplateItem = (item) => {
     addItem({
@@ -14,7 +13,7 @@ export default function TemplateItems() {
     });
   };
 
-  if (Object.keys(templates).length === 0) {
+  if (Object.keys(storeTemplates).length === 0) {
     return null;
   }
 
@@ -23,7 +22,7 @@ export default function TemplateItems() {
       <div className="max-w-3xl mx-auto p-4">
         <h2 className="text-lg font-medium text-gray-900 mb-4">よく買う商品</h2>
         <div className="space-y-6">
-          {Object.entries(templates).map(([categoryId, category]) => (
+          {Object.entries(storeTemplates).map(([categoryId, category]) => (
             <motion.div
               key={categoryId}
               initial={{ opacity: 0, y: 20 }}

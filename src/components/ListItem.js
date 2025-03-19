@@ -1,15 +1,22 @@
 import { CheckCircleIcon } from '@heroicons/react/24/outline';
-import { CheckCircleIcon as CheckCircleSolidIcon } from '@heroicons/react/24/solid';
+import { CheckCircleIcon as CheckCircleSolidIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { motion } from 'framer-motion';
+import { useShoppingContext } from '../contexts/ShoppingContext';
 
-export default function ListItem({ item, onUpdate, onDelete }) {
+export default function ListItem({ item, itemId, store }) {
+  const { updateItem, deleteItem, isRequester } = useShoppingContext();
+
   const handleToggle = () => {
-    onUpdate({ ...item, completed: !item.completed });
+    updateItem(store, itemId, { completed: !item.completed });
   };
 
   const handleQuantityChange = (newQuantity) => {
     if (newQuantity < 1) return;
-    onUpdate({ ...item, quantity: newQuantity });
+    updateItem(store, itemId, { quantity: newQuantity });
+  };
+
+  const handleDelete = () => {
+    deleteItem(store, itemId);
   };
 
   return (
@@ -40,6 +47,7 @@ export default function ListItem({ item, onUpdate, onDelete }) {
         <button
           onClick={() => handleQuantityChange(item.quantity - 1)}
           className="rounded-full w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 transition-colors"
+          disabled={!isRequester}
         >
           <span className="text-lg">-</span>
         </button>
@@ -49,15 +57,18 @@ export default function ListItem({ item, onUpdate, onDelete }) {
         <button
           onClick={() => handleQuantityChange(item.quantity + 1)}
           className="rounded-full w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 transition-colors"
+          disabled={!isRequester}
         >
           <span className="text-lg">+</span>
         </button>
-        <button
-          onClick={() => onDelete(item.id)}
-          className="text-red-500 hover:text-red-700"
-        >
-          削除
-        </button>
+        {isRequester && (
+          <button
+            onClick={handleDelete}
+            className="rounded-full w-8 h-8 flex items-center justify-center text-red-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+          >
+            <TrashIcon className="h-5 w-5" />
+          </button>
+        )}
       </div>
     </motion.div>
   );
