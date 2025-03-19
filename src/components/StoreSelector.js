@@ -1,13 +1,12 @@
 import { useShoppingContext } from '../contexts/ShoppingContext';
-import { ShoppingBagIcon, CheckCircleIcon, ClockIcon } from '@heroicons/react/24/outline';
+import { ClockIcon } from '@heroicons/react/24/outline';
 
 export default function StoreSelector() {
   const { 
     currentStore, 
     setCurrentStore, 
     stores,
-    metadata,
-    updateListStatus
+    isRequester
   } = useShoppingContext();
 
   const isStoreOpen = (store) => {
@@ -31,48 +30,6 @@ export default function StoreSelector() {
     return now >= storeOpenTime && now <= storeCloseTime;
   };
 
-  const getStatusIcon = (store) => {
-    const status = metadata.status[store];
-    if (status.completed) {
-      return <CheckCircleIcon className="h-5 w-5 text-green-500" />;
-    }
-    if (status.shopping) {
-      return <ShoppingBagIcon className="h-5 w-5 text-blue-500" />;
-    }
-    if (isStoreOpen(store)) {
-      return <ClockIcon className="h-5 w-5 text-green-500" />;
-    }
-    return <ClockIcon className="h-5 w-5 text-gray-400" />;
-  };
-
-  const getStatusColor = (store) => {
-    const status = metadata.status[store];
-    if (status.completed) {
-      return 'bg-green-50 text-green-700 border-green-200';
-    }
-    if (status.shopping) {
-      return 'bg-blue-50 text-blue-700 border-blue-200';
-    }
-    if (isStoreOpen(store)) {
-      return 'bg-green-50 text-green-700 border-green-200';
-    }
-    return 'bg-gray-50 text-gray-700 border-gray-200';
-  };
-
-  const getStatusText = (store) => {
-    const status = metadata.status[store];
-    if (status.completed) {
-      return '完了';
-    }
-    if (status.shopping) {
-      return '買い物中';
-    }
-    if (isStoreOpen(store)) {
-      return '営業中';
-    }
-    return '準備中';
-  };
-
   return (
     <div className="bg-white shadow-sm">
       <div className="max-w-3xl mx-auto">
@@ -89,25 +46,14 @@ export default function StoreSelector() {
             >
               <div className="flex items-center justify-between">
                 <span className="font-medium">{store.name}</span>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    const status = metadata.status[key];
-                    if (status.completed) {
-                      updateListStatus(key, { requested: false, shopping: false, completed: false });
-                    } else if (status.shopping) {
-                      updateListStatus(key, { requested: true, shopping: false, completed: true });
-                    } else if (status.requested) {
-                      updateListStatus(key, { requested: true, shopping: true, completed: false });
-                    } else {
-                      updateListStatus(key, { requested: true, shopping: false, completed: false });
-                    }
-                  }}
-                  className={`ml-2 px-3 py-1 rounded-full text-sm border ${getStatusColor(key)} flex items-center gap-1`}
-                >
-                  {getStatusIcon(key)}
-                  <span>{getStatusText(key)}</span>
-                </button>
+                <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-sm ${
+                  isStoreOpen(key)
+                    ? 'bg-green-50 text-green-700'
+                    : 'bg-gray-50 text-gray-500'
+                }`}>
+                  <ClockIcon className="w-4 h-4" />
+                  <span>{isStoreOpen(key) ? '営業中' : '準備中'}</span>
+                </div>
               </div>
             </button>
           ))}
