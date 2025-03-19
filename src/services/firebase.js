@@ -97,18 +97,14 @@ export const templateItems = {
     }
   },
   hanamasa: {
-    meat: {
-      title: '精肉',
+    food: {
+      title: '食材',
       items: [
-        { name: '鶏もも肉', defaultQuantity: 1 },
-        { name: '豚バラ肉', defaultQuantity: 1 }
-      ]
-    },
-    vegetable: {
-      title: '野菜',
-      items: [
-        { name: 'もやし', defaultQuantity: 2 },
-        { name: '青梗菜', defaultQuantity: 1 }
+        { name: 'パン粉', defaultQuantity: 1 },
+        { name: 'リードペーパー', defaultQuantity: 1 },
+        { name: '味噌', defaultQuantity: 2 },
+        { name: 'ソリッドX', defaultQuantity: 1 },
+        { name: '乾燥わかめ', defaultQuantity: 1 }
       ]
     }
   }
