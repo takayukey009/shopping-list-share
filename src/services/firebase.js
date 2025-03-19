@@ -78,14 +78,18 @@ export const templateItems = {
         { name: 'えのき', defaultQuantity: 1 },
         { name: '菜の花', defaultQuantity: 1 },
         { name: 'ケール', defaultQuantity: 1 },
-        { name: '玉ねぎ', defaultQuantity: 2 }
+        { name: '玉ねぎ', defaultQuantity: 9 },
+        { name: 'レモン', defaultQuantity: 4 }
       ]
     },
-    tofu: {
-      title: '豆腐・油',
+    food: {
+      title: '食材',
       items: [
         { name: 'きぬ豆腐', defaultQuantity: 2 },
-        { name: 'キャノーラ油', defaultQuantity: 1 }
+        { name: 'キャノーラ油', defaultQuantity: 1 },
+        { name: '卵パック', defaultQuantity: 1 },
+        { name: 'オリーブオイル', defaultQuantity: 1 },
+        { name: 'お麩', defaultQuantity: 1 }
       ]
     },
     rice: {
@@ -104,7 +108,10 @@ export const templateItems = {
         { name: 'リードペーパー', defaultQuantity: 1 },
         { name: '味噌', defaultQuantity: 2 },
         { name: 'ソリッドX', defaultQuantity: 1 },
-        { name: '乾燥わかめ', defaultQuantity: 1 }
+        { name: '乾燥わかめ', defaultQuantity: 1 },
+        { name: 'かつおだし', defaultQuantity: 1 },
+        { name: '小麦粉', defaultQuantity: 1 },
+        { name: 'チャッカマン', defaultQuantity: 1 }
       ]
     }
   }
