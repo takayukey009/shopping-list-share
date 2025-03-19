@@ -6,18 +6,11 @@ export default function Header() {
 
   return (
     <header className="bg-white shadow-sm">
-      <div className="max-w-3xl mx-auto px-4 py-4">
+      <div className="max-w-3xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <img 
-              src="/logo.png" 
-              alt="門" 
-              className="w-8 h-8 object-contain"
-            />
-            <h1 className="text-xl font-bold text-gray-900">
-              「門」買い出しリスト
-            </h1>
-          </div>
+          <h1 className="text-xl font-bold text-gray-900">
+            買い物リスト
+          </h1>
           <button
             onClick={switchRole}
             className={`inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
