@@ -27,7 +27,6 @@ function ListContent() {
               alt="門"
               className="w-full h-full object-contain"
               style={{
-                filter: 'brightness(0)',
                 maxWidth: '100%',
                 maxHeight: '100%'
               }}
