@@ -21,14 +21,15 @@ function ListContent() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
-          <div className="w-32 h-32 mx-auto mb-6 flex items-center justify-center">
+          <div className="w-32 h-32 mx-auto mb-6 relative">
             <img 
-              src="/logo.png"
+              src={process.env.PUBLIC_URL + '/logo.png'}
               alt="門"
-              className="w-full h-full object-contain"
-              style={{
-                maxWidth: '100%',
-                maxHeight: '100%'
+              className="absolute inset-0 w-full h-full object-contain"
+              onError={(e) => {
+                console.error('Image load error:', e);
+                e.target.onerror = null;
+                e.target.src = process.env.PUBLIC_URL + '/logo.svg';
               }}
             />
           </div>
