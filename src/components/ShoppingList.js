@@ -36,16 +36,18 @@ export default function ShoppingList() {
           }`}
         >
           <div className="p-4 flex items-center gap-3">
-            <button
-              onClick={() => handleToggleComplete(id, item.completed)}
-              className={`flex-none w-6 h-6 rounded-full border-2 transition-colors duration-200 flex items-center justify-center ${
-                item.completed 
-                  ? 'border-green-500 bg-green-500 text-white' 
-                  : 'border-gray-300 hover:border-gray-400'
-              }`}
-            >
-              {item.completed && <CheckIcon className="w-4 h-4" />}
-            </button>
+            {isShopper && (
+              <button
+                onClick={() => handleToggleComplete(id, item.completed)}
+                className={`flex-none w-6 h-6 rounded-full border-2 transition-colors duration-200 flex items-center justify-center ${
+                  item.completed 
+                    ? 'border-green-500 bg-green-500 text-white' 
+                    : 'border-gray-300 hover:border-gray-400'
+                }`}
+              >
+                {item.completed && <CheckIcon className="w-4 h-4" />}
+              </button>
+            )}
             
             <div className="flex-1 min-w-0">
               <h3 className={`text-lg font-medium truncate ${
