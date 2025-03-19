@@ -26,6 +26,34 @@ export const defaultStores = {
   hanamasa: 'ハナマサ'
 };
 
+// リストの役割タイプ
+export const roleTypes = {
+  REQUESTER: 'requester', // 依頼側
+  SHOPPER: 'shopper'      // 購入側
+};
+
+// リストの初期状態
+export const initialListState = {
+  metadata: {
+    createdAt: null,
+    currentRole: roleTypes.REQUESTER,
+    status: {
+      okstore: { requested: false, shopping: false, completed: false },
+      hanamasa: { requested: false, shopping: false, completed: false }
+    }
+  },
+  items: {
+    okstore: {},
+    hanamasa: {}
+  }
+};
+
+// リストの進行状況の初期値
+export const initialListStatus = {
+  okstore: { inProgress: false, completedAt: null },
+  hanamasa: { inProgress: false, completedAt: null }
+};
+
 // テンプレートアイテム
 export const templateItems = {
   okstore: {
@@ -77,10 +105,4 @@ export const templateItems = {
 // リストIDを生成
 export const generateListId = () => {
   return Math.random().toString(36).substring(2, 10);
-};
-
-// リストの進行状況の初期値
-export const initialListStatus = {
-  okstore: { inProgress: false, completedAt: null },
-  hanamasa: { inProgress: false, completedAt: null }
 };
