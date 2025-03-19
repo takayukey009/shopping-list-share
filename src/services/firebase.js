@@ -3,13 +3,13 @@ import { getDatabase, ref, set, onValue, serverTimestamp, push } from "firebase/
 
 // Firebase設定
 const firebaseConfig = {
-  apiKey: "AIzaSyDi7i2EhUpIQqwtvg0sOK6itUhojZX1TPc",
-  authDomain: "shopping-list-share-43e1f.firebaseapp.com",
-  databaseURL: "https://shopping-list-share-43e1f-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "shopping-list-share-43e1f",
-  storageBucket: "shopping-list-share-43e1f.appspot.com",
-  messagingSenderId: "582639473155",
-  appId: "1:582639473155:web:735113953f479b7a397436"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "AIzaSyDi7i2EhUpIQqwtvg0sOK6itUhojZX1TPc",
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "shopping-list-share-43e1f.firebaseapp.com",
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL || "https://shopping-list-share-43e1f-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "shopping-list-share-43e1f",
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "shopping-list-share-43e1f.appspot.com",
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "582639473155",
+  appId: process.env.REACT_APP_FIREBASE_APP_ID || "1:582639473155:web:735113953f479b7a397436"
 };
 
 // Firebase初期化
@@ -72,18 +72,6 @@ export const templateItems = {
       ]
     }
   }
-};
-
-// 新しいリストを作成
-export const createNewList = async (storeName) => {
-  const listRef = ref(database, 'lists/' + generateListId());
-  const newList = {
-    createdAt: serverTimestamp(),
-    store: storeName,
-    items: {}
-  };
-  await set(listRef, newList);
-  return listRef;
 };
 
 // リストIDを生成

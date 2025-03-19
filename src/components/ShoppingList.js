@@ -21,23 +21,23 @@ export default function ShoppingList() {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-24">
-      <div className="max-w-3xl mx-auto py-4">
+    <div className="pb-4">
+      <div className="max-w-3xl mx-auto">
         <AnimatePresence>
           {sortedItems.length === 0 ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="p-8 text-center text-gray-500 bg-white rounded-lg shadow"
+              className="p-4 text-center text-gray-500 bg-white rounded-lg shadow-sm"
             >
-              <p className="text-lg font-medium mb-2">アイテムがありません</p>
+              <p className="text-base font-medium mb-1">アイテムがありません</p>
               <p className="text-sm">
                 下部の入力フォームからアイテムを追加してください
               </p>
             </motion.div>
           ) : (
-            <div className="bg-white shadow rounded-lg divide-y divide-gray-200">
+            <div className="bg-white shadow-sm rounded-lg divide-y divide-gray-200">
               {sortedItems.map(([itemId, item]) => (
                 <motion.div
                   key={itemId}
