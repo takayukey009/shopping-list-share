@@ -17,24 +17,19 @@ export const ShoppingProvider = ({ children, listId }) => {
     
     const listRef = ref(database, `lists/${listId}`);
     const unsubscribe = onValue(listRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        setItems(data.items || initialListState.items);
-        setMetadata(data.metadata || {
+      const data = snapshot.val() || {
+        items: initialListState.items,
+        metadata: {
           ...initialListState.metadata,
           createdAt: serverTimestamp()
-        });
-      } else {
-        // リストが存在しない場合、新規作成
-        const newList = {
-          items: initialListState.items,
-          metadata: {
-            ...initialListState.metadata,
-            createdAt: serverTimestamp()
-          }
-        };
-        set(listRef, newList);
-      }
+        }
+      };
+      
+      setItems(data.items || {});
+      setMetadata(data.metadata || {
+        ...initialListState.metadata,
+        createdAt: serverTimestamp()
+      });
     });
 
     return () => unsubscribe();
@@ -49,32 +44,22 @@ export const ShoppingProvider = ({ children, listId }) => {
       name: item.name,
       quantity: item.quantity || 1,
       completed: false,
-      timestamp: serverTimestamp(),
-      addedBy: roleTypes.REQUESTER
+      timestamp: serverTimestamp()
     };
 
     try {
-      await push(itemsRef, newItem);
+      const newItemRef = await push(itemsRef, newItem);
       console.log('Item added successfully:', newItem);
+      return newItemRef.key;
     } catch (error) {
       console.error('Error adding item:', error);
+      return null;
     }
   };
 
   const updateItem = async (store, itemId, updates) => {
     if (!listId) return;
     
-    // 購入側のみがcompletedを更新可能
-    if (updates.completed !== undefined && metadata.currentRole !== roleTypes.SHOPPER) {
-      return;
-    }
-    
-    // 依頼側のみが商品情報を更新可能
-    if ((updates.name !== undefined || updates.quantity !== undefined) && 
-        metadata.currentRole !== roleTypes.REQUESTER) {
-      return;
-    }
-
     const itemRef = ref(database, `lists/${listId}/items/${store}/${itemId}`);
     try {
       await set(itemRef, { ...items[store][itemId], ...updates });
@@ -111,7 +96,7 @@ export const ShoppingProvider = ({ children, listId }) => {
   };
 
   const getStoreStatus = (store) => {
-    const status = metadata.status[store];
+    const status = metadata?.status?.[store] || initialListState.metadata.status[store];
     if (status.completed) return '完了';
     if (status.shopping) return '買い物中';
     if (status.requested) return '依頼済み';
@@ -119,8 +104,8 @@ export const ShoppingProvider = ({ children, listId }) => {
   };
 
   const value = {
-    items,
-    metadata,
+    items: items || {},
+    metadata: metadata || initialListState.metadata,
     currentStore,
     setCurrentStore,
     addItem,
@@ -129,8 +114,8 @@ export const ShoppingProvider = ({ children, listId }) => {
     updateListStatus,
     getStoreStatus,
     stores: defaultStores,
-    isRequester: metadata.currentRole === roleTypes.REQUESTER,
-    isShopper: metadata.currentRole === roleTypes.SHOPPER
+    isRequester: metadata?.currentRole === roleTypes.REQUESTER,
+    isShopper: metadata?.currentRole === roleTypes.SHOPPER
   };
 
   return (
