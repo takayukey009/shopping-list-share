@@ -2,7 +2,7 @@ import { useShoppingContext } from '../contexts/ShoppingContext';
 import { PencilIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
 
 export default function Header() {
-  const { switchRole, isRequester, currentRole } = useShoppingContext();
+  const { switchRole, isRequester } = useShoppingContext();
 
   return (
     <header className="bg-white shadow-sm">
@@ -21,13 +21,13 @@ export default function Header() {
           >
             {isRequester ? (
               <>
-                <ShoppingCartIcon className="w-5 h-5 mr-2" />
-                買い物モードに切替
+                <PencilIcon className="w-5 h-5 mr-2" />
+                依頼モード
               </>
             ) : (
               <>
-                <PencilIcon className="w-5 h-5 mr-2" />
-                依頼モードに切替
+                <ShoppingCartIcon className="w-5 h-5 mr-2" />
+                買い物モード
               </>
             )}
           </button>

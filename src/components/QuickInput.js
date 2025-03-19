@@ -6,7 +6,7 @@ export default function QuickInput() {
   const [input, setInput] = useState('');
   const { addItem, currentStore, isRequester } = useShoppingContext();
 
-  const handleQuickInput = async (input) => {
+  const handleQuickInput = (input) => {
     if (!input.trim()) return;
     
     const match = input.trim().match(/^(.+?)(?:\s+(\d+))?$/);
@@ -15,16 +15,12 @@ export default function QuickInput() {
       const itemName = match[1];
       const quantity = match[2] ? parseInt(match[2]) : 1;
       
-      try {
-        await addItem({
-          name: itemName,
-          quantity,
-          store: currentStore
-        });
-        setInput('');
-      } catch (error) {
-        console.error('Error adding item:', error);
-      }
+      addItem({
+        name: itemName,
+        quantity,
+        store: currentStore
+      });
+      setInput('');
     }
   };
 

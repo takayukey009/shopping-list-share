@@ -48,7 +48,7 @@ export const ShoppingProvider = ({ children, listId }) => {
     };
 
     try {
-      const newItemRef = await push(itemsRef, newItem);
+      const newItemRef = push(itemsRef, newItem);
       console.log('Item added successfully:', newItem);
       return newItemRef.key;
     } catch (error) {
@@ -81,6 +81,24 @@ export const ShoppingProvider = ({ children, listId }) => {
     }
   };
 
+  const switchRole = async () => {
+    if (!listId) return;
+    
+    const newRole = metadata?.currentRole === roleTypes.REQUESTER ? roleTypes.SHOPPER : roleTypes.REQUESTER;
+    const metadataRef = ref(database, `lists/${listId}/metadata`);
+    
+    try {
+      await set(metadataRef, { 
+        ...metadata, 
+        currentRole: newRole,
+        status: metadata?.status || initialListState.metadata.status
+      });
+      console.log('Role switched successfully to:', newRole);
+    } catch (error) {
+      console.error('Error switching role:', error);
+    }
+  };
+
   const updateListStatus = async (store, status) => {
     if (!listId) return;
     
@@ -93,20 +111,6 @@ export const ShoppingProvider = ({ children, listId }) => {
     }
   };
 
-  const switchRole = async () => {
-    if (!listId) return;
-    
-    const newRole = metadata.currentRole === roleTypes.REQUESTER ? roleTypes.SHOPPER : roleTypes.REQUESTER;
-    const metadataRef = ref(database, `lists/${listId}/metadata`);
-    
-    try {
-      await set(metadataRef, { ...metadata, currentRole: newRole });
-      console.log('Role switched successfully to:', newRole);
-    } catch (error) {
-      console.error('Error switching role:', error);
-    }
-  };
-
   const getStoreStatus = (store) => {
     const status = metadata?.status?.[store] || initialListState.metadata.status[store];
     if (status.completed) return '完了';
@@ -116,8 +120,8 @@ export const ShoppingProvider = ({ children, listId }) => {
   };
 
   const value = {
-    items: items || {},
-    metadata: metadata || initialListState.metadata,
+    items,
+    metadata,
     currentStore,
     setCurrentStore,
     addItem,
