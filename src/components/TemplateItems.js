@@ -1,25 +1,10 @@
 import { useShoppingContext } from '../contexts/ShoppingContext';
-import { defaultTemplates } from '../services/firebase';
+import { templateItems } from '../services/firebase';
 import { motion } from 'framer-motion';
-
-const templateItems = {
-  'スーパー': [
-    '牛乳', '卵', 'パン', '野菜', '果物', '肉', '魚'
-  ],
-  'ドラッグストア': [
-    'シャンプー', '歯磨き粉', 'ボディソープ', 'ティッシュ'
-  ],
-  'コンビニ': [
-    'おにぎり', 'お弁当', '飲み物', 'パン'
-  ],
-  '100均': [
-    '文具', '掃除用品', '収納用品', 'キッチン用品'
-  ]
-};
 
 export default function TemplateItems() {
   const { currentStore, addItem } = useShoppingContext();
-  const templates = defaultTemplates[currentStore] || {};
+  const templates = templateItems[currentStore] || {};
 
   const handleAddTemplateItem = (item) => {
     addItem({
@@ -46,7 +31,7 @@ export default function TemplateItems() {
               transition={{ duration: 0.2 }}
             >
               <h3 className="text-sm font-medium text-gray-500 mb-2">
-                {category.name}
+                {category.title}
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {category.items.map((item, index) => (

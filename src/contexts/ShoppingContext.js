@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { database, ref, set, onValue, push, serverTimestamp, defaultStores, defaultListData } from '../services/firebase';
+import { database, ref, set, onValue, push, serverTimestamp, defaultStores, initialListStatus } from '../services/firebase';
 
 const ShoppingContext = createContext();
 
@@ -8,8 +8,11 @@ export const useShoppingContext = () => {
 };
 
 export const ShoppingProvider = ({ children, listId }) => {
-  const [items, setItems] = useState(defaultListData.items);
-  const [listStatus, setListStatus] = useState(defaultListData.status);
+  const [items, setItems] = useState({
+    okstore: {},
+    hanamasa: {}
+  });
+  const [listStatus, setListStatus] = useState(initialListStatus);
   const [currentStore, setCurrentStore] = useState('okstore');
   const [listDate, setListDate] = useState(null);
 
@@ -20,8 +23,11 @@ export const ShoppingProvider = ({ children, listId }) => {
     const unsubscribe = onValue(listRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        setItems(data.items || defaultListData.items);
-        setListStatus(data.status || defaultListData.status);
+        setItems(data.items || {
+          okstore: {},
+          hanamasa: {}
+        });
+        setListStatus(data.status || initialListStatus);
         setListDate(data.createdAt ? new Date(data.createdAt) : null);
       }
     });

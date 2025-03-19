@@ -2,7 +2,7 @@ import { CheckCircleIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon as CheckCircleSolidIcon } from '@heroicons/react/24/solid';
 import { motion } from 'framer-motion';
 
-export default function ListItem({ item, onUpdate }) {
+export default function ListItem({ item, onUpdate, onDelete }) {
   const handleToggle = () => {
     onUpdate({ ...item, completed: !item.completed });
   };
@@ -14,12 +14,10 @@ export default function ListItem({ item, onUpdate }) {
 
   return (
     <motion.div
-      layout
-      className={`flex items-center p-4 ${item.completed ? 'bg-gray-50' : 'bg-white'}`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.2 }}
+      className={`flex items-center p-4 ${item.completed ? 'bg-gray-50' : 'bg-white'}`}
     >
       <button
         onClick={handleToggle}
@@ -53,6 +51,12 @@ export default function ListItem({ item, onUpdate }) {
           className="rounded-full w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 transition-colors"
         >
           <span className="text-lg">+</span>
+        </button>
+        <button
+          onClick={() => onDelete(item.id)}
+          className="text-red-500 hover:text-red-700"
+        >
+          削除
         </button>
       </div>
     </motion.div>
