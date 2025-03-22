@@ -2,20 +2,21 @@ import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, onValue, push, get, serverTimestamp } from "firebase/database";
 
 // Firebase設定
+// 環境変数が設定されていない場合はデモ用の設定を使用
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "AIzaSyDi7i2EhUpIQqwtvg0sOK6itUhojZX1TPc",
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "shopping-list-share-43e1f.firebaseapp.com",
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL || "https://shopping-list-share-43e1f-default-rtdb.firebaseio.com",
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "shopping-list-share-43e1f",
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "shopping-list-share-43e1f.appspot.com",
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "123456789012",
+  appId: process.env.REACT_APP_FIREBASE_APP_ID || "1:123456789012:web:1234567890abcdef"
 };
 
 // Firebase初期化
 console.log('Initializing Firebase with config:', {
   ...firebaseConfig,
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY ? '[HIDDEN]' : 'NOT_FOUND'
+  apiKey: '[HIDDEN]'
 });
 
 const app = initializeApp(firebaseConfig);
@@ -99,14 +100,9 @@ export const templateItems = {
     food: {
       title: '食材',
       items: [
-        { name: 'パン粉', defaultQuantity: 1 },
-        { name: 'リードペーパー', defaultQuantity: 1 },
-        { name: '味噌', defaultQuantity: 2 },
-        { name: 'ソリッドX', defaultQuantity: 1 },
-        { name: '乾燥わかめ', defaultQuantity: 1 },
-        { name: 'かつおだし', defaultQuantity: 1 },
-        { name: '小麦粉', defaultQuantity: 1 },
-        { name: 'チャッカマン', defaultQuantity: 1 }
+        { name: '豚バラ肉', defaultQuantity: 1 },
+        { name: '鶏むね肉', defaultQuantity: 1 },
+        { name: '牛肉', defaultQuantity: 1 }
       ]
     }
   }
@@ -117,4 +113,4 @@ export const generateListId = () => {
   return Math.random().toString(36).substring(2, 10);
 };
 
-export { database, ref, set, onValue, serverTimestamp, push, get };
+export { database, ref, set, onValue, push, get, serverTimestamp };

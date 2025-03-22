@@ -18,6 +18,8 @@ export default function QuickInput() {
       const itemName = match[1];
       const quantity = match[2] ? parseInt(match[2]) : 1;
       
+      console.log('Adding item:', { name: itemName, quantity, store: currentStore });
+      
       try {
         const success = await addItem({
           name: itemName,

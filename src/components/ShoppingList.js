@@ -248,14 +248,20 @@ export default function ShoppingList() {
     const { active, over } = event;
     
     if (active.id !== over.id) {
+      console.log('Drag ended:', { active, over });
+      
       // ドラッグ&ドロップされたアイテムのインデックスを取得
       const activeIndex = sortedItems.findIndex(([id]) => id === active.id);
       const overIndex = sortedItems.findIndex(([id]) => id === over.id);
+      
+      console.log('Indices:', { activeIndex, overIndex });
       
       // 未完了アイテムのみを対象にする
       const incompleteItems = sortedItems.filter(([_, item]) => !item.completed);
       const activeIncompleteIndex = incompleteItems.findIndex(([id]) => id === active.id);
       const overIncompleteIndex = incompleteItems.findIndex(([id]) => id === over.id);
+      
+      console.log('Incomplete indices:', { activeIncompleteIndex, overIncompleteIndex });
       
       if (activeIncompleteIndex !== -1 && overIncompleteIndex !== -1) {
         // ローカルの状態を更新
@@ -263,7 +269,21 @@ export default function ShoppingList() {
         setSortedItems(newItems);
         
         // Firebaseの状態を更新
-        reorderItems(currentStore, activeIncompleteIndex, overIncompleteIndex);
+        reorderItems(currentStore, activeIncompleteIndex, overIncompleteIndex)
+          .then(success => {
+            if (success) {
+              console.log('Items reordered successfully');
+            } else {
+              console.error('Failed to reorder items');
+              // 失敗した場合は元の状態に戻す
+              setSortedItems(sortedItems);
+            }
+          })
+          .catch(error => {
+            console.error('Error reordering items:', error);
+            // エラーが発生した場合は元の状態に戻す
+            setSortedItems(sortedItems);
+          });
       }
     }
   };

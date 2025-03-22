@@ -189,15 +189,17 @@ export const ShoppingProvider = ({ children, listId }) => {
         const [movedItem] = incompleteItems.splice(startIndex, 1);
         incompleteItems.splice(endIndex, 0, movedItem);
         
-        // 順序を更新
-        const updates = {};
-        incompleteItems.forEach(([id, item], index) => {
-          updates[`lists/${listId}/items/${store}/${id}/order`] = Date.now() + index;
+        // 順序を更新（個別に更新）
+        const promises = incompleteItems.map(([id, item], index) => {
+          const itemRef = ref(database, `lists/${listId}/items/${store}/${id}`);
+          return set(itemRef, {
+            ...item,
+            order: Date.now() + index
+          });
         });
         
-        // Firebase一括更新
-        const dbRef = ref(database);
-        await set(dbRef, updates);
+        await Promise.all(promises);
+        console.log('Items reordered successfully');
         
         return true;
       }
@@ -219,12 +221,26 @@ export const ShoppingProvider = ({ children, listId }) => {
     console.log('Switching role to:', newRole);
     
     try {
+      // メタデータを更新
       const metadataRef = ref(database, `lists/${listId}/metadata`);
-      await set(metadataRef, {
-        ...metadata,
+      
+      // 現在のメタデータを取得
+      const metadataSnapshot = await get(metadataRef);
+      const currentMetadata = metadataSnapshot.exists() ? metadataSnapshot.val() : { ...initialListState.metadata };
+      
+      // 役割を更新
+      const updatedMetadata = {
+        ...currentMetadata,
         currentRole: newRole
-      });
-      console.log('Role switched successfully');
+      };
+      
+      // Firebaseに保存
+      await set(metadataRef, updatedMetadata);
+      
+      // ローカルの状態を更新
+      setMetadata(updatedMetadata);
+      
+      console.log('Role switched successfully to:', newRole);
       return true;
     } catch (error) {
       console.error('Error switching role:', error);
