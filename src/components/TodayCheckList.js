@@ -13,7 +13,8 @@ const TodayCheckList = () => {
 
   // 今日の曜日を取得
   const today = new Date();
-  const dayOfWeek = today.toLocaleDateString('en-US', { weekday: 'lowercase' });
+  const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  const dayOfWeek = dayNames[today.getDay()];
   const dayOfMonth = today.getDate();
   const japaneseWeekday = weekdays[dayOfWeek] || '不明';
 

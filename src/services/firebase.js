@@ -154,7 +154,9 @@ export const checkFrequencies = {
 // 今日チェックすべきアイテムを取得する関数
 export const getTodayCheckItems = () => {
   const today = new Date();
-  const dayOfWeek = today.toLocaleDateString('en-US', { weekday: 'lowercase' });
+  // 曜日を取得する方法を修正
+  const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  const dayOfWeek = dayNames[today.getDay()];
   const dayOfMonth = today.getDate().toString();
   
   const allItems = [];
