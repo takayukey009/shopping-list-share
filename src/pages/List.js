@@ -6,6 +6,7 @@ import StoreSelector from '../components/StoreSelector';
 import ShoppingList from '../components/ShoppingList';
 import QuickInput from '../components/QuickInput';
 import TemplateItems from '../components/TemplateItems';
+import TodayCheckList from '../components/TodayCheckList';
 
 // ランダムなIDを生成する関数
 const generateRandomId = () => {
@@ -41,6 +42,7 @@ export default function List() {
       <div className="min-h-screen bg-gray-50 pb-32">
         <Header />
         <main className="max-w-3xl mx-auto px-4">
+          <TodayCheckList />
           <StoreSelector />
           <div className="mt-4">
             <ShoppingList />

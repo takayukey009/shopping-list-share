@@ -68,55 +68,55 @@ export const templateItems = {
     vegetable: {
       title: '野菜',
       items: [
-        { name: 'トレビス', defaultQuantity: 1 },
-        { name: 'トマト', defaultQuantity: 2 },
-        { name: 'レタス', defaultQuantity: 1 },
-        { name: 'えのき', defaultQuantity: 1 },
-        { name: '菜の花', defaultQuantity: 1 },
-        { name: 'ケール', defaultQuantity: 1 },
-        { name: '玉ねぎ', defaultQuantity: 9 },
-        { name: 'レモン', defaultQuantity: 4 },
-        { name: 'パプリカ 赤', defaultQuantity: 1 },
-        { name: 'パプリカ 金', defaultQuantity: 1 },
-        { name: 'ライム', defaultQuantity: 1 },
-        { name: '糠漬けきゅうり', defaultQuantity: 1 }
+        { name: 'トレビス', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday'] } },
+        { name: 'トマト', defaultQuantity: 2, checkSchedule: { frequency: 'weekly', days: ['monday', 'thursday'] } },
+        { name: 'レタス', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday', 'thursday'] } },
+        { name: 'えのき', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday', 'thursday', 'saturday'] } },
+        { name: '菜の花', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday'] } },
+        { name: 'ケール', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday'] } },
+        { name: '玉ねぎ', defaultQuantity: 9, checkSchedule: { frequency: 'weekly', days: ['monday', 'thursday', 'saturday'] } },
+        { name: 'レモン', defaultQuantity: 4, checkSchedule: { frequency: 'weekly', days: ['monday'] } },
+        { name: 'パプリカ 赤', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday'] } },
+        { name: 'パプリカ 金', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday'] } },
+        { name: 'ライム', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday'] } },
+        { name: '糠漬けきゅうり', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday'] } }
       ]
     },
     food: {
       title: '食材',
       items: [
-        { name: 'きぬ豆腐', defaultQuantity: 2 },
-        { name: 'キャノーラ油', defaultQuantity: 1 },
-        { name: '卵パック', defaultQuantity: 1 },
-        { name: 'オリーブオイル', defaultQuantity: 1 },
-        { name: 'お麩', defaultQuantity: 1 },
-        { name: 'バター', defaultQuantity: 1 },
-        { name: 'ミックスチーズ', defaultQuantity: 1 },
-        { name: '田舎味噌', defaultQuantity: 1 },
-        { name: 'こうじ味噌', defaultQuantity: 1 },
-        { name: '卵', defaultQuantity: 1 },
-        { name: '小麦粉', defaultQuantity: 1 }
+        { name: 'きぬ豆腐', defaultQuantity: 2, checkSchedule: { frequency: 'weekly', days: ['monday', 'thursday'] } },
+        { name: 'キャノーラ油', defaultQuantity: 1, checkSchedule: { frequency: 'biweekly', days: ['10', '20'] } },
+        { name: '卵パック', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday', 'thursday', 'saturday'] } },
+        { name: 'オリーブオイル', defaultQuantity: 1, checkSchedule: { frequency: 'biweekly', days: ['10', '20'] } },
+        { name: 'お麩', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday'] } },
+        { name: 'バター', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday'] } },
+        { name: 'ミックスチーズ', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday', 'thursday'] } },
+        { name: '田舎味噌', defaultQuantity: 1, checkSchedule: { frequency: 'biweekly', days: ['10', '20'] } },
+        { name: 'こうじ味噌', defaultQuantity: 1, checkSchedule: { frequency: 'biweekly', days: ['10', '20'] } },
+        { name: '卵', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday', 'thursday', 'saturday'] } },
+        { name: '小麦粉', defaultQuantity: 1, checkSchedule: { frequency: 'biweekly', days: ['10', '20'] } }
       ]
     },
     rice: {
       title: 'お米',
       items: [
-        { name: 'つや姫', defaultQuantity: 1 },
-        { name: '秋田こまち', defaultQuantity: 1 }
+        { name: 'つや姫', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday', 'thursday', 'saturday'] } },
+        { name: '秋田こまち', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday', 'thursday', 'saturday'] } }
       ]
     },
     household: {
       title: '日用品',
       items: [
-        { name: 'キッチンポリ袋', defaultQuantity: 1 },
-        { name: '冷凍冷蔵保存バッグ M', defaultQuantity: 1 },
-        { name: '冷凍冷蔵保存バッグ L', defaultQuantity: 1 },
-        { name: 'アルミホイル', defaultQuantity: 1 },
-        { name: 'クッキングシート', defaultQuantity: 1 },
-        { name: 'CR着火ライターショートタイプ', defaultQuantity: 1 },
-        { name: 'ソリッドX (楽天の方が安い？)', defaultQuantity: 1 },
-        { name: 'ビズーレペーパー(長方形)', defaultQuantity: 1 },
-        { name: 'リードペーパー(ロール)', defaultQuantity: 1 }
+        { name: 'キッチンポリ袋', defaultQuantity: 1, checkSchedule: { frequency: 'biweekly', days: ['10', '20'] } },
+        { name: '冷凍冷蔵保存バッグ M', defaultQuantity: 1, checkSchedule: { frequency: 'biweekly', days: ['10', '20'] } },
+        { name: '冷凍冷蔵保存バッグ L', defaultQuantity: 1, checkSchedule: { frequency: 'biweekly', days: ['10', '20'] } },
+        { name: 'アルミホイル', defaultQuantity: 1, checkSchedule: { frequency: 'biweekly', days: ['10', '20'] } },
+        { name: 'クッキングシート', defaultQuantity: 1, checkSchedule: { frequency: 'biweekly', days: ['10', '20'] } },
+        { name: 'CR着火ライターショートタイプ', defaultQuantity: 1, checkSchedule: { frequency: 'biweekly', days: ['10', '20'] } },
+        { name: 'ソリッドX (楽天の方が安い？)', defaultQuantity: 1, checkSchedule: { frequency: 'biweekly', days: ['10', '20'] } },
+        { name: 'ビズーレペーパー(長方形)', defaultQuantity: 1, checkSchedule: { frequency: 'biweekly', days: ['10', '20'] } },
+        { name: 'リードペーパー(ロール)', defaultQuantity: 1, checkSchedule: { frequency: 'biweekly', days: ['10', '20'] } }
       ]
     }
   },
@@ -124,12 +124,68 @@ export const templateItems = {
     food: {
       title: '食材',
       items: [
-        { name: '⚠️パン粉 (ハナマサオンリー)⚠️', defaultQuantity: 1 },
-        { name: '⚠️冷凍長ポテト(ハナマサオンリー)⚠️', defaultQuantity: 1 },
-        { name: '⚠️中々25度宮崎県黒木本店⚠️', defaultQuantity: 1 }
+        { name: '⚠️パン粉 (ハナマサオンリー)⚠️', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday'] } },
+        { name: '⚠️冷凍長ポテト(ハナマサオンリー)⚠️', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday'] } },
+        { name: '⚠️中々25度宮崎県黒木本店⚠️', defaultQuantity: 1, checkSchedule: { frequency: 'biweekly', days: ['10', '20'] } }
       ]
     }
   }
+};
+
+// 曜日の定数
+export const weekdays = {
+  sunday: '日曜日',
+  monday: '月曜日',
+  tuesday: '火曜日',
+  wednesday: '水曜日',
+  thursday: '木曜日',
+  friday: '金曜日',
+  saturday: '土曜日'
+};
+
+// チェック頻度の定数
+export const checkFrequencies = {
+  daily: '毎日',
+  weekly: '週1回',
+  biweekly: '月2回',
+  monthly: '月1回'
+};
+
+// 今日チェックすべきアイテムを取得する関数
+export const getTodayCheckItems = () => {
+  const today = new Date();
+  const dayOfWeek = today.toLocaleDateString('en-US', { weekday: 'lowercase' });
+  const dayOfMonth = today.getDate().toString();
+  
+  const allItems = [];
+  
+  // すべてのカテゴリとストアからアイテムを収集
+  Object.keys(templateItems).forEach(storeKey => {
+    const store = templateItems[storeKey];
+    Object.keys(store).forEach(categoryKey => {
+      const category = store[categoryKey];
+      category.items.forEach(item => {
+        if (item.checkSchedule) {
+          const { frequency, days } = item.checkSchedule;
+          
+          // 曜日または日付に基づいてチェック
+          if (
+            (frequency === 'daily') ||
+            (frequency === 'weekly' && days.includes(dayOfWeek)) ||
+            ((frequency === 'biweekly' || frequency === 'monthly') && days.includes(dayOfMonth))
+          ) {
+            allItems.push({
+              ...item,
+              store: storeKey,
+              category: categoryKey
+            });
+          }
+        }
+      });
+    });
+  });
+  
+  return allItems;
 };
 
 // リストIDを生成
