@@ -75,7 +75,11 @@ export const templateItems = {
         { name: '菜の花', defaultQuantity: 1 },
         { name: 'ケール', defaultQuantity: 1 },
         { name: '玉ねぎ', defaultQuantity: 9 },
-        { name: 'レモン', defaultQuantity: 4 }
+        { name: 'レモン', defaultQuantity: 4 },
+        { name: 'パプリカ 赤', defaultQuantity: 1 },
+        { name: 'パプリカ 金', defaultQuantity: 1 },
+        { name: 'ライム', defaultQuantity: 1 },
+        { name: '糠漬けきゅうり', defaultQuantity: 1 }
       ]
     },
     food: {
@@ -85,7 +89,13 @@ export const templateItems = {
         { name: 'キャノーラ油', defaultQuantity: 1 },
         { name: '卵パック', defaultQuantity: 1 },
         { name: 'オリーブオイル', defaultQuantity: 1 },
-        { name: 'お麩', defaultQuantity: 1 }
+        { name: 'お麩', defaultQuantity: 1 },
+        { name: 'バター', defaultQuantity: 1 },
+        { name: 'ミックスチーズ', defaultQuantity: 1 },
+        { name: '田舎味噌', defaultQuantity: 1 },
+        { name: 'こうじ味噌', defaultQuantity: 1 },
+        { name: '卵', defaultQuantity: 1 },
+        { name: '小麦粉', defaultQuantity: 1 }
       ]
     },
     rice: {
@@ -94,15 +104,29 @@ export const templateItems = {
         { name: 'つや姫', defaultQuantity: 1 },
         { name: '秋田こまち', defaultQuantity: 1 }
       ]
+    },
+    household: {
+      title: '日用品',
+      items: [
+        { name: 'キッチンポリ袋', defaultQuantity: 1 },
+        { name: '冷凍冷蔵保存バッグ M', defaultQuantity: 1 },
+        { name: '冷凍冷蔵保存バッグ L', defaultQuantity: 1 },
+        { name: 'アルミホイル', defaultQuantity: 1 },
+        { name: 'クッキングシート', defaultQuantity: 1 },
+        { name: 'CR着火ライターショートタイプ', defaultQuantity: 1 },
+        { name: 'ソリッドX (楽天の方が安い？)', defaultQuantity: 1 },
+        { name: 'ビズーレペーパー(長方形)', defaultQuantity: 1 },
+        { name: 'リードペーパー(ロール)', defaultQuantity: 1 }
+      ]
     }
   },
   hanamasa: {
     food: {
       title: '食材',
       items: [
-        { name: '豚バラ肉', defaultQuantity: 1 },
-        { name: '鶏むね肉', defaultQuantity: 1 },
-        { name: '牛肉', defaultQuantity: 1 }
+        { name: '⚠️パン粉 (ハナマサオンリー)⚠️', defaultQuantity: 1 },
+        { name: '⚠️冷凍長ポテト(ハナマサオンリー)⚠️', defaultQuantity: 1 },
+        { name: '⚠️中々25度宮崎県黒木本店⚠️', defaultQuantity: 1 }
       ]
     }
   }
