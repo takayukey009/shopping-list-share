@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { database, ref, set, onValue, push, serverTimestamp, defaultStores, roleTypes, initialListState, templateItems } from '../services/firebase';
+import { database, ref, set, onValue, push, serverTimestamp, get, defaultStores, roleTypes, initialListState, templateItems } from '../services/firebase';
 
 const ShoppingContext = createContext();
 
@@ -16,6 +16,7 @@ export const ShoppingProvider = ({ children, listId }) => {
   const [metadata, setMetadata] = useState(initialListState.metadata);
   const [currentStore, setCurrentStore] = useState('okstore');
   const [loading, setLoading] = useState(true);
+  const [editingItem, setEditingItem] = useState(null);
 
   useEffect(() => {
     if (!listId) {
@@ -32,8 +33,12 @@ export const ShoppingProvider = ({ children, listId }) => {
 
       if (!data) {
         console.log('Creating new list with initial state');
+        // 初期データに空のオブジェクトを確実に設定
         const initialData = {
-          items: initialListState.items,
+          items: {
+            okstore: {},
+            hanamasa: {}
+          },
           metadata: {
             ...initialListState.metadata,
             createdAt: serverTimestamp()
@@ -50,7 +55,13 @@ export const ShoppingProvider = ({ children, listId }) => {
           });
       } else {
         console.log('Updating state with existing data');
-        setItems(data.items || initialListState.items);
+        // データが存在しない場合は空のオブジェクトを設定
+        const updatedItems = data.items || { okstore: {}, hanamasa: {} };
+        // 各ストアが存在することを確認
+        if (!updatedItems.okstore) updatedItems.okstore = {};
+        if (!updatedItems.hanamasa) updatedItems.hanamasa = {};
+        
+        setItems(updatedItems);
         setMetadata(data.metadata || initialListState.metadata);
       }
       setLoading(false);
@@ -66,9 +77,14 @@ export const ShoppingProvider = ({ children, listId }) => {
   }, [listId]);
 
   const addItem = async (item) => {
-    if (!listId || !item.name) {
-      console.error('Cannot add item: invalid input', { listId, item });
-      return;
+    if (!listId) {
+      console.error('Cannot add item: no listId');
+      return false;
+    }
+    
+    if (!item || !item.name) {
+      console.error('Cannot add item: invalid item data', item);
+      return false;
     }
 
     const store = item.store || currentStore;
@@ -76,13 +92,24 @@ export const ShoppingProvider = ({ children, listId }) => {
       name: item.name.trim(),
       quantity: parseInt(item.quantity) || 1,
       completed: false,
-      timestamp: serverTimestamp()
+      timestamp: serverTimestamp(),
+      order: Date.now() // 追加：アイテムの順序を保存
     };
 
     try {
       console.log('Adding new item:', { store, ...newItem });
-      const itemsRef = ref(database, `lists/${listId}/items/${store}`);
-      const newItemRef = push(itemsRef);
+      
+      // 確実にパスが存在することを確認
+      const storeRef = ref(database, `lists/${listId}/items/${store}`);
+      
+      // まずストアのパスが存在することを確認
+      const storeSnapshot = await get(storeRef);
+      if (!storeSnapshot.exists()) {
+        await set(storeRef, {});
+      }
+      
+      // アイテムを追加
+      const newItemRef = push(storeRef);
       await set(newItemRef, newItem);
       console.log('Item added successfully:', { id: newItemRef.key, ...newItem });
       return true;
@@ -104,6 +131,14 @@ export const ShoppingProvider = ({ children, listId }) => {
     if (currentItem) {
       try {
         console.log('Updating item:', { store, itemId, updates });
+        
+        // チェック状態が変更された場合、順序も更新
+        if (updates.completed !== undefined && updates.completed !== currentItem.completed) {
+          updates.order = updates.completed ? 
+            Date.now() + 1000000000 : // 完了したアイテムは大きな値を設定して下に移動
+            Date.now();              // 未完了に戻したアイテムは現在時刻を設定
+        }
+        
         await set(itemRef, { ...currentItem, ...updates });
         console.log('Item updated successfully');
         return true;
@@ -135,6 +170,45 @@ export const ShoppingProvider = ({ children, listId }) => {
     }
   };
 
+  const reorderItems = async (store, startIndex, endIndex) => {
+    if (!listId) {
+      console.error('Cannot reorder items: no listId');
+      return false;
+    }
+
+    try {
+      const storeItems = items[store] || {};
+      const itemEntries = Object.entries(storeItems);
+      
+      // 完了状態でグループ分け
+      const completedItems = itemEntries.filter(([_, item]) => item.completed);
+      const incompleteItems = itemEntries.filter(([_, item]) => !item.completed);
+      
+      // ドラッグ&ドロップは未完了アイテム内でのみ行う
+      if (startIndex >= 0 && endIndex >= 0 && startIndex < incompleteItems.length && endIndex < incompleteItems.length) {
+        const [movedItem] = incompleteItems.splice(startIndex, 1);
+        incompleteItems.splice(endIndex, 0, movedItem);
+        
+        // 順序を更新
+        const updates = {};
+        incompleteItems.forEach(([id, item], index) => {
+          updates[`lists/${listId}/items/${store}/${id}/order`] = Date.now() + index;
+        });
+        
+        // Firebase一括更新
+        const dbRef = ref(database);
+        await set(dbRef, updates);
+        
+        return true;
+      }
+      
+      return false;
+    } catch (error) {
+      console.error('Error reordering items:', error);
+      return false;
+    }
+  };
+
   const switchRole = async () => {
     if (!listId) {
       console.error('Cannot switch role: no listId');
@@ -158,6 +232,28 @@ export const ShoppingProvider = ({ children, listId }) => {
     }
   };
 
+  const editItem = (store, itemId, item) => {
+    setEditingItem({ store, itemId, item });
+  };
+
+  const cancelEdit = () => {
+    setEditingItem(null);
+  };
+
+  const saveEdit = async (name) => {
+    if (!editingItem) return false;
+    
+    const { store, itemId, item } = editingItem;
+    const result = await updateItem(store, itemId, { name: name.trim() });
+    
+    if (result) {
+      setEditingItem(null);
+      return true;
+    }
+    
+    return false;
+  };
+
   const value = {
     items,
     metadata,
@@ -166,18 +262,19 @@ export const ShoppingProvider = ({ children, listId }) => {
     addItem,
     updateItem,
     deleteItem,
+    reorderItems,
     switchRole,
     stores: defaultStores,
     templates: templateItems,
     isRequester: metadata?.currentRole === roleTypes.REQUESTER,
     isShopper: metadata?.currentRole === roleTypes.SHOPPER,
     currentRole: metadata?.currentRole || roleTypes.REQUESTER,
-    loading
+    loading,
+    editingItem,
+    editItem,
+    cancelEdit,
+    saveEdit
   };
-
-  if (loading) {
-    console.log('Context is still loading...');
-  }
 
   return (
     <ShoppingContext.Provider value={value}>
