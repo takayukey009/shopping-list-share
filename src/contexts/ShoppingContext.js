@@ -77,41 +77,44 @@ export const ShoppingProvider = ({ children, listId }) => {
   }, [listId]);
 
   const addItem = async (item) => {
-    if (!listId) {
-      console.error('Cannot add item: no listId');
-      return false;
-    }
-    
     if (!item || !item.name) {
       console.error('Cannot add item: invalid item data', item);
       return false;
     }
 
-    const store = item.store || currentStore;
-    const newItem = {
-      name: item.name.trim(),
-      quantity: parseInt(item.quantity) || 1,
-      completed: false,
-      timestamp: serverTimestamp(),
-      order: Date.now() // 追加：アイテムの順序を保存
-    };
+    if (!listId) {
+      console.error('Cannot add item: no listId');
+      return false;
+    }
 
     try {
-      console.log('Adding new item:', { store, ...newItem });
+      const store = item.store || currentStore;
+      const itemsRef = ref(database, `lists/${listId}/items/${store}`);
       
-      // 確実にパスが存在することを確認
-      const storeRef = ref(database, `lists/${listId}/items/${store}`);
+      // 新しいアイテムのリファレンスを取得
+      const newItemRef = push(itemsRef);
+      const itemId = newItemRef.key;
       
-      // まずストアのパスが存在することを確認
-      const storeSnapshot = await get(storeRef);
-      if (!storeSnapshot.exists()) {
-        await set(storeRef, {});
-      }
+      // 未完了アイテムの数を取得して順序を決定
+      const snapshot = await get(itemsRef);
+      const storeItems = snapshot.val() || {};
       
-      // アイテムを追加
-      const newItemRef = push(storeRef);
+      // 未完了アイテムの数をカウント
+      const incompleteCount = Object.values(storeItems).filter(item => !item.completed).length;
+      
+      // 新しいアイテムを作成
+      const newItem = {
+        name: item.name,
+        quantity: item.quantity || 1,
+        completed: false,
+        order: incompleteCount,
+        createdAt: serverTimestamp()
+      };
+      
+      // Firebaseに保存
       await set(newItemRef, newItem);
-      console.log('Item added successfully:', { id: newItemRef.key, ...newItem });
+      console.log('Item added successfully:', newItem);
+      
       return true;
     } catch (error) {
       console.error('Error adding item:', error);
@@ -216,31 +219,29 @@ export const ShoppingProvider = ({ children, listId }) => {
       console.error('Cannot switch role: no listId');
       return false;
     }
-    
-    const newRole = metadata.currentRole === roleTypes.REQUESTER ? roleTypes.SHOPPER : roleTypes.REQUESTER;
-    console.log('Switching role to:', newRole);
-    
+
     try {
-      // メタデータを更新
-      const metadataRef = ref(database, `lists/${listId}/metadata`);
-      
       // 現在のメタデータを取得
-      const metadataSnapshot = await get(metadataRef);
-      const currentMetadata = metadataSnapshot.exists() ? metadataSnapshot.val() : { ...initialListState.metadata };
+      const metadataRef = ref(database, `lists/${listId}/metadata`);
+      const snapshot = await get(metadataRef);
+      const currentMetadata = snapshot.val() || { ...initialListState.metadata };
       
-      // 役割を更新
-      const updatedMetadata = {
-        ...currentMetadata,
+      // 新しいロールを設定
+      const newRole = currentMetadata.currentRole === roleTypes.REQUESTER 
+        ? roleTypes.SHOPPER 
+        : roleTypes.REQUESTER;
+      
+      console.log('Switching role from', currentMetadata.currentRole, 'to', newRole);
+      
+      // Firebaseを更新
+      await set(ref(database, `lists/${listId}/metadata/currentRole`), newRole);
+      
+      // ローカル状態を更新
+      setMetadata(prevMetadata => ({
+        ...prevMetadata,
         currentRole: newRole
-      };
+      }));
       
-      // Firebaseに保存
-      await set(metadataRef, updatedMetadata);
-      
-      // ローカルの状態を更新
-      setMetadata(updatedMetadata);
-      
-      console.log('Role switched successfully to:', newRole);
       return true;
     } catch (error) {
       console.error('Error switching role:', error);
