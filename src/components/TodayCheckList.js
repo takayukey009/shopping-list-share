@@ -24,7 +24,8 @@ const TodayCheckList = () => {
   // ストア名の日本語表示
   const storeNames = {
     okstore: 'オーケーストア',
-    hanamasa: 'ハナマサ'
+    hanamasa: 'ハナマサ',
+    seijoishin: '成城石井'
   };
 
   // カテゴリ名の日本語表示

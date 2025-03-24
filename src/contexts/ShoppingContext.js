@@ -37,7 +37,8 @@ export const ShoppingProvider = ({ children, listId }) => {
         const initialData = {
           items: {
             okstore: {},
-            hanamasa: {}
+            hanamasa: {},
+            seijoishin: {}
           },
           metadata: {
             ...initialListState.metadata,
@@ -56,10 +57,11 @@ export const ShoppingProvider = ({ children, listId }) => {
       } else {
         console.log('Updating state with existing data');
         // データが存在しない場合は空のオブジェクトを設定
-        const updatedItems = data.items || { okstore: {}, hanamasa: {} };
+        const updatedItems = data.items || { okstore: {}, hanamasa: {}, seijoishin: {} };
         // 各ストアが存在することを確認
         if (!updatedItems.okstore) updatedItems.okstore = {};
         if (!updatedItems.hanamasa) updatedItems.hanamasa = {};
+        if (!updatedItems.seijoishin) updatedItems.seijoishin = {};
         
         setItems(updatedItems);
         setMetadata(data.metadata || initialListState.metadata);

@@ -37,6 +37,13 @@ export const defaultStores = {
       open: '00:00',
       close: '24:00'
     }
+  },
+  seijoishin: {
+    name: '成城石井',
+    hours: {
+      open: '09:00',
+      close: '22:00'
+    }
   }
 };
 
@@ -53,12 +60,14 @@ export const initialListState = {
     currentRole: roleTypes.REQUESTER,
     status: {
       okstore: { requested: false, shopping: false, completed: false },
-      hanamasa: { requested: false, shopping: false, completed: false }
+      hanamasa: { requested: false, shopping: false, completed: false },
+      seijoishin: { requested: false, shopping: false, completed: false }
     }
   },
   items: {
     okstore: {},
-    hanamasa: {}
+    hanamasa: {},
+    seijoishin: {}
   }
 };
 
@@ -127,6 +136,15 @@ export const templateItems = {
         { name: '⚠️パン粉 (ハナマサオンリー)⚠️', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday'] } },
         { name: '⚠️冷凍長ポテト(ハナマサオンリー)⚠️', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday'] } },
         { name: '⚠️中々25度宮崎県黒木本店⚠️', defaultQuantity: 1, checkSchedule: { frequency: 'biweekly', days: ['10', '20'] } }
+      ]
+    }
+  },
+  seijoishin: {
+    food: {
+      title: '食材',
+      items: [
+        { name: 'パン', defaultQuantity: 1, checkSchedule: { frequency: 'weekly', days: ['monday', 'thursday'] } },
+        { name: 'コルニッション', defaultQuantity: 1, checkSchedule: { frequency: 'biweekly', days: ['10', '20'] } }
       ]
     }
   }
