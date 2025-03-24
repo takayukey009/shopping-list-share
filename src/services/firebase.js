@@ -41,7 +41,7 @@ export const defaultStores = {
   seijoishin: {
     name: '成城石井',
     hours: {
-      open: '09:00',
+      open: '08:00',
       close: '22:00'
     }
   }
