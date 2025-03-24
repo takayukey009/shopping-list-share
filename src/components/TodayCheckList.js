@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { getTodayCheckItems, weekdays } from '../services/firebase';
+import { useShoppingContext } from '../contexts/ShoppingContext';
 
 const TodayCheckList = () => {
   const [todayItems, setTodayItems] = useState([]);
   const [isOpen, setIsOpen] = useState(true);
+  const [addedItems, setAddedItems] = useState({});
+  const { addItem } = useShoppingContext();
   
   useEffect(() => {
     // 今日チェックすべきアイテムを取得
@@ -30,6 +33,21 @@ const TodayCheckList = () => {
     food: '食材',
     rice: 'お米',
     household: '日用品'
+  };
+
+  // アイテムを買い物リストに追加
+  const handleAddItem = (item) => {
+    addItem({
+      name: item.name,
+      quantity: item.defaultQuantity || 1,
+      store: item.store
+    });
+    
+    // 追加済みアイテムを記録
+    setAddedItems(prev => ({
+      ...prev,
+      [`${item.store}-${item.name}`]: true
+    }));
   };
 
   if (todayItems.length === 0) {
@@ -72,14 +90,35 @@ const TodayCheckList = () => {
               <div key={storeKey} className="mb-4">
                 <h3 className="text-md font-medium text-gray-700 mb-1">{storeNames[storeKey]}</h3>
                 <ul className="pl-4">
-                  {storeItems.map((item, index) => (
-                    <li key={index} className="text-sm py-1 flex items-center">
-                      <span className="w-6 h-6 flex items-center justify-center bg-blue-100 text-blue-800 rounded-full mr-2 text-xs">
-                        {categoryNames[item.category]?.charAt(0) || '?'}
-                      </span>
-                      {item.name}
-                    </li>
-                  ))}
+                  {storeItems.map((item, index) => {
+                    const itemKey = `${item.store}-${item.name}`;
+                    const isAdded = addedItems[itemKey];
+                    
+                    return (
+                      <li key={index} className="text-sm py-1 flex items-center justify-between">
+                        <div className="flex items-center">
+                          <span className="w-6 h-6 flex items-center justify-center bg-blue-100 text-blue-800 rounded-full mr-2 text-xs">
+                            {categoryNames[item.category]?.charAt(0) || '?'}
+                          </span>
+                          {item.name}
+                          {item.defaultQuantity > 1 && 
+                            <span className="ml-2 text-xs text-gray-500">×{item.defaultQuantity}</span>
+                          }
+                        </div>
+                        <button
+                          onClick={() => handleAddItem(item)}
+                          disabled={isAdded}
+                          className={`ml-2 px-2 py-1 text-xs rounded ${
+                            isAdded 
+                              ? 'bg-green-100 text-green-700' 
+                              : 'bg-blue-500 text-white hover:bg-blue-600'
+                          }`}
+                        >
+                          {isAdded ? '追加済み' : '追加'}
+                        </button>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             );
