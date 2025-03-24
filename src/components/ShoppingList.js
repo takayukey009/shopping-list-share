@@ -72,7 +72,7 @@ function SortableItem({ id, item, itemId, store, isRequester, isShopper, onToggl
         )}
         
         <div className="flex-1 min-w-0">
-          <h3 className={`text-lg font-medium truncate ${
+          <h3 className={`text-base font-medium truncate ${
             item.completed ? 'text-gray-500 line-through' : 'text-gray-900'
           }`}>
             {item.name}
